@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="odometer-theme-car.css" />
+    <link rel="stylesheet" href="{% static 'main/base.css' %}">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <div class="header-top {% if page != 'home' and page != 'about_us' %}other{% endif %} {{ day_time }}">
+        <div class="background" 
+            {% if page == 'home' or page == 'about_us' %}
+                style="background-image: url('{% static 'images/background/' %}{{ day_time }}.jpg');"
+            {% endif %}>
+
+            {% if page != 'home' and page != 'about_us' %}
+                {% if background_video %}
+                    <video preload="auto" autoplay loop muted playsinline src="/media/{{ background_video }}"></video>
+                {% else %}
+                    <video preload="auto" autoplay loop muted playsinline src="../static/background.mp4"></video>
+                {% endif %}
+            {% endif %}
+        </div>        
+        <div class="logo-wrapper {% if page != 'home' %}other{% endif %}">
+            {% if page != 'about_us' %}
+            <div>
+                <a href="{% url 'main:home' %}" style="text-decoration: none; color: inherit;">
+                    <div class="logo-img">           
+                        <img src="../static/images/logo_light.png" alt="">
+                    </div>
+                    <h2 class="logo-title">
+                        Ministry of Industry and Construction Production of Turkmenistan
+                    </h2>
+                </a>
+            </div>
+            <div>
+                <a href="https://neutrality.gov.tm" target="_blank" style="text-decoration: none; color: inherit;">
+                    <div class="logo-img">
+                        <img src="../static/images/Logo_2.png" alt="">
+                    </div>
+                    <h2 class="logo-title">
+                        2020 year - Turkmenistan – Home of Neutrality
+                    </h2>
+                </a>
+            </div>
+            {% endif %}
+        </div>
+</div>
+    
+    <div class="header-wrapper">
+        <div class="header max-content">
+            <div class="menu-wrapper">
+                <div class="nav-menu">
+                    <ul>
+                        <li>
+                            <a {% if page == 'home' %}class="active"{% endif %} href="{% url 'main:home' %}">Main page</a>
+                        </li>
+                        <li>
+                            <a {% if page == 'about_us' %}class="active"{% endif %} href="{% url 'main:about_us' %}">About the Ministry</a>
+                        </li>
+                        <li>
+                            <a {% if page == 'news' %}class="active"{% endif %} href="{% url 'main:news' %}">News</a>
+                        </li>
+                        <li>
+                            <a {% if page == 'tender' %}class="active"{% endif %} href="{% url 'main:tender' %}">Tenders</a>
+                        </li>
+                        <li>
+                            <a {% if page == 'document' %}class="active"{% endif %} href="{% url 'main:document' %}">Documents</a>
+                        </li>
+                        <li>
+                            <a {% if page == 'contact_us' %}class="active"{% endif %} href="{% url 'main:contact_us' %}">Contact us</a>
+                        </li>
+                        <li>
+                            <a href="">Online order</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="lang">
+                    <ul>
+                        <li>
+                            <form action="">{% csrf_token %}
+                                <input name="next" type="hidden" value=''>
+                                <input type="hidden" name="language" value="tm">
+                                <button>TM</button>
+                            </form>
+                        </li>
+                        <li class="active">
+                            <form action="">{% csrf_token %}
+                                <input name="next" type="hidden" value=''>
+                                <input type="hidden" name="language" value="tm">
+                                <button>EN</button>
+                            </form>
+                        </li>
+                        <li>
+                            <form action="">{% csrf_token %}
+                                <input name="next" type="hidden" value=''>
+                                <input type="hidden" name="language" value="tm">
+                                <button>RU</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+                <div class="search">
+                    <img src="../static/images/search-icon.svg" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="search-wrapper hide">
+        <form class="search-form" method="GET" action="{% url 'main:search' %}">
+            <input name="q" id="q" type="search" class="search-input" placeholder="Search news..">
+        <button class="search-button" type="submit">
+            Search
+        </button><br>
+        </form>
+    </div>
+    <div class="main-wrapper">
+        <div class="main">
+    {% block content %}
+    {% endblock %}
+        </div>
+    </div>
+    <div class="footer-wrapper" style="position: relative;">
+        <div class="footer max-content">
+            <div class="footer__section-1">
+                <div class="logo-wrapper">
+                    <div class="logo-img">
+                        <img src="../static/images/logo_light.png" alt="">
+                    </div>
+                    <h2 class="logo-name">
+                        Ministry of Industry and Construction Production of Turkmenistan
+                    </h2>
+                </div>
+                <div class="contact-wrapper">
+                    <div class="fax">
+                        <h6>
+                            Fax
+                        </h6>
+                        <p>
+                            {% for site_settings in site_settings %}
+                            {{ site_settings.contact_fax | linebreaks }}
+                        </p>
+                    </div>
+                    
+                    <div class="address">
+                        <h6>
+                            Legal address
+                        </h6>
+                        <p>
+                            {{ site_settings.contact_address | linebreaks }}
+                        </p>
+                    </div>
+                    <div class="email">
+                        <h6>
+                            E-mail
+                        </h6>
+                        <p>
+                            {{ site_settings.contact_email | linebreaks }}
+                        </p>
+                    </div>
+                    <div class="phone">
+                        <h6>
+                            Phone numbers
+                        </h6>
+                        <p>
+                            {{ site_settings.contact_phone | linebreaks }}
+                        </p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="footer__section-2">
+                <div class="copyright">
+                    Copyright 2020.<br>
+                    All rights reserved
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'main/some.js' %}"></script>
+    <script src="{% static 'main/main.js' %}"></script>
+    <script src="{% static 'main/factory.js' %}"></script>
+</body>
+</html>

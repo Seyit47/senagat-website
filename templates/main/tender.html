@@ -1,0 +1,51 @@
+{% extends 'main/base.html' %}
+{% block title %}
+Tender
+{% endblock %}
+{% block content %}
+
+<div class="tenders-content max-content">
+    <div class="tenders__container">
+        {% for item in tender %}
+        <a href="{% url 'main:tender_detail' pk=item.pk %}" class="tenders__item">
+            <div class="tenders__item-img-wrapper">
+                <div class="tenders__item-img">
+                    <img src="/media/{{ item.thumbnail }}" alt="">
+                </div>
+            </div>
+            <div class="tenders__item-content">
+                <p class="tenders__item-date">
+                    {{ item.published_date | date:"d M, Y" }}
+                </p>
+                <h3 class="tenders__item-title">
+                    {{ item.title | truncatechars:150}}
+                </h3>
+                <p class="tenders__item-description">
+                    {{ item.content | striptags | safe |truncatewords:31 }}
+                </p>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    <div class="pagination">
+        <a href="{% url 'main:tender' %}?page=1" class="first-page page-item">
+            
+        </a>
+        <a href="{% url 'main:tender' %}?page={{ pagination.prev }}" class="prev-page page-item">
+
+        </a>
+        {% for p in pagination.pages %}
+            <a href="{% url 'main:tender' %}?page={{ p }}" class="page-item {% if pagination.page == p %}active{% endif %}">
+                {{ p }}
+            </a>
+        {% endfor %}
+        <a href="{% url 'main:tender' %}?page={{ pagination.next }}" class="next-page page-item">
+
+        </a>
+        <a href="{% url 'main:tender' %}?page={{ pagination.lastpage }}" class="last-page page-item">
+
+        </a>  
+    </div>
+</div>
+
+{% endblock %}

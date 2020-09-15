@@ -1,0 +1,13 @@
+{% extends 'administrator/base.html' %}
+{% block title %}
+News
+{% endblock %}
+
+{% block content %}
+<div class="news-edit__content">
+    <form method="POST" class="post-form" enctype="multipart/form-data">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Save</button>
+    </form>
+</div>
+{% endblock %}

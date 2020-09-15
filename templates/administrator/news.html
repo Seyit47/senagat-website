@@ -1,0 +1,37 @@
+{% extends 'administrator/base.html' %}
+{% block content %}
+<div class="news-content">
+    <h1 class="page-headline">
+        News
+        <a  href="{% url 'administrator:news_create' %}"
+            class="page-headline__btn btn">
+            Create
+        </a>
+    </h1>
+    
+    <div class="news-wrapper">
+        {% for item in news %}
+            <div class="news-item">
+                <div class="news-item__img">
+                    <img src="/media/{{ item.image }}" alt="">
+                </div>
+                <div class="news-item__content">
+                    <h2>{{ item.title | truncatechars:70 }}</h2>
+                    <p>
+                        {{ item.content | striptags | safe | truncatechars:120 }}
+                    </p>
+                    <a class="btn btn-edit" href="{% url 'administrator:news_edit' pk=item.pk %}">Edit</a>
+                    <form   method="POST"
+                            action="{% url 'administrator:news' %}">
+                        {% csrf_token %}
+                        <button @click="remove"
+                                class="btn btn-remove"
+                                type="button">
+                            Remove
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'main/base.html' %}
+{% block title %}
+Tender
+{% endblock %}
+{% block content %}
+<div class="tender-detail-content max-content">
+    <div class="bread-crumb">
+        <a href="{% url 'main:home' %}">Main page</a> / 
+        <a href="{% url 'main:tender' %}">Tenders</a> / 
+        <a href="" class="active">
+            ...
+        </a>
+    </div>
+    <h2 class="small-content tender-detail__title">
+        {{ tender.title }}
+    </h2>
+    <div class="tender-detail__img-wrapper">
+        <div class="tender-detail__img">
+            <img src="/media/{{ tender.image_crop }}" alt="">
+        </div>
+    </div>
+    <div class="tender-detail__content">
+        {% autoescape off %}
+            {{ tender.content }}
+        {% endautoescape %}
+    </div>
+</div>
+{% endblock %}

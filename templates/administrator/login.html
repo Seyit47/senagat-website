@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'administrator/login.css' %}">
+    <title>Login</title>
+</head>
+<body>
+    <div id="web">
+        <div class="login-wrapper">
+            <form   id="login-form"
+                    class="login-form"
+                    method="POST">{% csrf_token %}
+                {% if bad_request %} 
+                    <p class="error-text">
+                        Username or password is empty
+                    </p>
+                {% endif %}
+                {% if unauthorized %}
+                    <p class="error-text">
+                        Username or password is not valid
+                    </p>
+                {% endif %}
+                {% if internal_server_error %}
+                    <p class="error-text">
+                        Error in server side
+                    </p>
+                {% endif %}
+                {% csrf_token %}
+                <div class="input-wrapper">
+                    <label for="username">
+                        Username
+                    </label>
+                    <input  id="username"
+                            name="username"
+                            type="text"
+                            required>
+                </div>
+                <div class="input-wrapper">
+                    <label for="password">
+                        Password
+                    </label>
+                    <input  id="password"
+                            name="password"
+                            type="password"
+                            required>
+                </div>
+                <button class="submit">Login</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

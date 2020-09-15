@@ -1,0 +1,237 @@
+{% extends 'main/base.html' %}
+{% block title %}
+Main page
+{% endblock %}
+{% block content %}
+<div class="home-content">
+    <div class="president-content max-content">
+        <div class="president-slog__slider-wrapper">
+            <div class="president-slog__slider">
+                <h2>
+                    President of Turkmenistan Gurbanguly Berdimuhamedov:
+                </h2>
+            
+                <div class="president-slog__slide">
+                    <p>
+                        "We have set high goals for the industrial development of our country, to make it one of the leading countries in the world, to further improve the welfare of our people."
+                    </p>
+                </div>
+                <div class="president-slog__slide">
+                    <p>
+                        "The industrial complex should be the leader of other sectors of the economy, as it is the basis for the future development of these sectors."
+                    </p>
+                </div>
+                <div class="president-slog__slide">
+                    <p>
+                        "We need to educate highly qualified, hardworking, progressive, highly qualified specialists who are well experienced in advanced technologies."
+                    </p>
+                </div>
+                <div class="president-slog__slide-outline">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+        </div>
+        <div class="president-slog__img-wrapper">
+            <div class="president-slog__img">
+                <img src="../static/images/2_President.jpg" alt="">
+            </div>
+        </div>
+    </div>
+
+    <div class="section__latest-news">
+        {% for item in news %}
+        {% if forloop.counter0 < 4 %}
+        <div class="latest-news__item-background">
+            <div class="background-wrapper">
+                <div class="background__img-blur">
+                    <img src="/media/{{ item.image_blur }}" alt="">
+                </div>
+                <div class="background__img">
+                    <img src="/media/{{ item.image }}" alt="">
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+
+    <div class="background__gradient"></div>
+        <div class="latest-news-wrapper max-content">
+            {% for item in news %}
+            {% if forloop.counter0 < 4 %}
+            <div class="latest-news__title-wrapper">
+                <h1 class="latest-news__title">
+                    {{ item.title | truncatechars:114}}
+                </h1>
+                <a href="{% url 'main:news_detail' pk=item.pk %}" class="latest-news__read-more">
+                    Read more
+                </a>
+            </div>
+            {% endif %}
+            {% endfor %}
+
+            <div class="latest-news__container">
+                {% for item in news %}
+                {% if forloop.counter0 < 4 %}
+                <div class="latest-news__item">
+                    <div class="latest-news__item-progress">
+                        <div class="progress"></div>
+                    </div>
+                    <p class="latest-news__item-date">
+                        {{ item.published_date | date:"d M, Y" }}
+                    </p>
+                    <p class="latest-news__item-title">
+                        {{ item.title | truncatechars:100 }}
+                    </p>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="section__news max-content">
+        <h2 class="section-title black">
+            News
+            <a href="{% url 'main:news' %}" class="section-title__show-all">View all</a>
+        </h2>
+        <div class="news__container">
+            {% for item in news %}
+            <a href="{% url 'main:news_detail' pk=item.pk %}" class="news__item">
+                <div class="news__item-img">
+                    <div class="news__item-img-blur">
+                        <img src="/media/{{ item.thumbnail }}" alt="">
+                    </div>
+                </div>
+                <div class="news__item-content">
+                    <p class="news__item-date">
+                        {{ item.published_date | date:"d M, Y" }}
+                    </p>
+                    <h4 class="news__item-title">
+                        {{ item.title | truncatechars:100 }}
+                    </h4>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="section__magazines">
+        <div class="max-content">
+            <div class="gallery__btn-wrapper">
+                <div class="gallery__btn-prev"></div>
+                <div class="gallery__btn-next"></div>
+            </div>
+            <h2 class="section-title white">
+                Magazine “The Industry of Turkmenistan”
+            </h2>
+            <div class="magazines-wrapper">
+                <div class="magazines__container container">
+                    {% for magazine in magazines %}
+                    <a href="/media/{{ magazine.pdf_file }}" target="_blank" class="magazines__item item">
+                        <div class="magazines__item-img-wrapper">
+                            <div class="magazines__item-img">
+                                <img src="/media/{{ magazine.thumbnail }}" alt="">    
+                            </div>
+                        </div>
+                        <div class="magazines__item-title">
+                            {{ magazine.title }}
+                        </div>
+                    </a>
+                    {% endfor %}
+                    
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="section__about">
+        <div class="max-content">
+            <h2 class="section-title black">
+                About the Ministry
+            </h2>
+            <div class="section__about-wrapper">
+                <div class="about__content-wrapper">
+                    <div class="about__content">
+                        <p>
+                            Contemporary times require further improvement of management techniques established in the modern industrial system for the wise achievement of the task aimed at transforming Turkmenistan into progressive country with developed industry.
+                        </p>
+                    </div>
+                    <a href="{% url 'main:about_us' %}" class="about__read-more">
+                        Read more
+                    </a>
+                </div>
+                {% for site_settings in site_settings %}
+                <div class="about__video-wrapper">
+                    <div class="about__video">
+                        <video  preload="auto" controls class="background-video">
+                            <source  src="/media/{{ site_settings.about_video }}" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="section__factory">
+        <div class="max-content">
+            <div class="gallery__btn-wrapper">
+                <div class="gallery__btn-prev"></div>
+                <div class="gallery__btn-next"></div>
+            </div>
+            <h2 class="section-title white">
+                Companies
+            </h2>
+            <div class="factory-wrapper">
+                <div class="factory__container container">
+                    {% for factory in factories %}
+                    <a href="{% url 'main:factory_detail' pk=factory.pk %}" class="factory__item item">
+                        <div class="factory__item-img-wrapper">
+                            <div class="factory__item-img">
+                                <img src="/media/{{ factory.thumbnail }}" alt="">    
+                            </div>
+                        </div>
+                        <h3 class="factory__item-title">
+                            {{ factory.title }}
+                        </h3>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section__tender max-content">
+        <h2 class="section-title black">
+            Tenders
+            <a href="{% url 'main:tender' %}" class="section-title__show-all">View all</a>
+        </h2>
+        <div class="tenders__container">
+            {% for item in tender %}
+            <a href="{% url 'main:tender_detail' pk=item.pk %}" class="tenders__item">
+                <div class="tenders__item-img-wrapper">
+                    <div class="tenders__item-img">
+                        <img src="/media/{{ item.thumbnail }}" alt="">
+                    </div>
+                </div>
+                <div class="tenders__item-content">
+                    <p class="tenders__item-date">
+                        {{ item.published_date | date:"d M, Y" }}
+                    </p>
+                    <h3 class="tenders__item-title">
+                        {{ item.title | truncatechars:150}}
+                    </h3>
+                    <p class="tenders__item-description">
+                        {{ item.content | striptags | safe |truncatewords:30 }}
+                    </p>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

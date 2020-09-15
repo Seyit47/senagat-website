@@ -1,0 +1,70 @@
+{% extends 'main/base.html' %}
+{% block title %}
+News
+{% endblock %}
+{% block content %}
+<div class="news__content max-content">
+    <div class="news__big-container">
+        {% for item in news %}
+            {% if forloop.counter < 3 %}
+                <a href="{% url 'main:news_detail' pk=item.pk %}" class="news__item">
+                    <div class="news__item-img">
+                        <div class="news__item-img-blur">
+                            <img src="/media/{{ item.thumbnail }}" alt="">
+                        </div>
+                    </div>
+                    <div class="news__item-content">
+                        <p class="news__item-date">
+                            {{ item.published_date | date:"d M, Y" }}
+                        </p>
+                        <h4 class="news__item-title">
+                            {{ item.title | truncatechars:100 }}
+                        </h4>
+                    </div>
+                </a>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+        <div class="news__container">
+            {% for item in news %}
+            {% if forloop.counter > 2 %}
+            <a href="{% url 'main:news_detail' pk=item.pk %}" class="news__item">
+                <div class="news__item-img">
+                    <div class="news__item-img-blur">
+                        <img src="/media/{{ item.thumbnail }}" alt="">
+                    </div>
+                </div>
+                <div class="news__item-content">
+                    <p class="news__item-date">
+                        {{ item.published_date | date:"d M, Y" }}
+                    </p>
+                    <h4 class="news__item-title">
+                        {{ item.title | truncatechars:100 }}
+                    </h4>
+                </div>
+            </a>
+            {% endif %}
+            {% endfor %}
+        </div>
+        <div class="pagination">
+            <a href="{% url 'main:news' %}?page=1" class="first-page page-item">
+                
+            </a>
+            <a href="{% url 'main:news' %}?page={{ pagination.prev }}" class="prev-page page-item">
+    
+            </a>
+            {% for p in pagination.pages %}
+                <a href="{% url 'main:news' %}?page={{ p }}" class="page-item {% if pagination.page == p %}active{% endif %}">
+                    {{ p }}
+                </a>
+            {% endfor %}
+            <a href="{% url 'main:news' %}?page={{ pagination.next }}" class="next-page page-item">
+    
+            </a>
+            <a href="{% url 'main:news' %}?page={{ pagination.lastpage }}" class="last-page page-item">
+    
+            </a>  
+        </div>
+</div>
+{% endblock %}

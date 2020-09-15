@@ -1,0 +1,27 @@
+{% extends 'main/base.html' %}
+{% block title %}
+Documents
+{% endblock %}
+{% block content %}
+<div class="documents-content max-content">
+    <div class="documents__left-content">
+        <div class="documents__img-wrapper">
+            <div class="documents__img">
+                {% for site_settings in site_settings %}
+                <img src="/media/{{ site_settings.document_image }}" alt="">
+            </div>
+        </div>
+    </div>
+    <div class="documents__right-content">
+        <h2 class="documents__title">
+            {{ site_settings.document_title }}
+        </h2>
+        <div class="documents__content">
+            {% autoescape off %}
+                {{ site_settings.document_content }}
+            {% endautoescape %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

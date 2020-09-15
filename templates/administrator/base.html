@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'administrator/base.css' %}">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <div id="web">
+        <div class="side-bar">
+            <div class="side-bar__header">
+
+            </div>
+            <div class="nav-menu">
+                <ul>
+                    <li {% if page == 'news' %} class="active" {% endif %}>
+                        <a href="{% url 'administrator:news' %}">News</a>
+                    </li>
+                    <li>
+                        <a href="">Tender</a>
+                    </li>
+                    <li>    
+                        <a href="">Magazines</a>
+                    </li>
+                    <li {% if page == 'about_inform' %} class="active" {% endif %}>    
+                        <a href="{% url 'administrator:about_inform' %}">About the Ministry</a>
+                    </li>
+                    <li>    
+                        <a href="">Documents</a>
+                    </li>
+                    <li>    
+                        <a href="">Contacts</a>
+                    </li>
+                    <li>    
+                        <a href="">Gallery</a>
+                    </li>
+                </ul> 
+            </div>
+            <div class="side-bar__footer">
+                <div class="logout">
+                    <a  href="{% url 'administrator:logout' %}">
+                        Logout
+                    </a>    
+                </div>
+            </div>
+        </div>
+        <div class="content">
+            {% block content %}
+
+            {% endblock %}
+        </div>
+    </div>
+</body>
+</html>

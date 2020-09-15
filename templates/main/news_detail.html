@@ -1,0 +1,32 @@
+{% extends 'main/base.html' %}
+{% block title %}
+News
+{% endblock %}
+{% block content %}
+<div class="news-detail-content max-content">
+    <div class="bread-crumb">
+        <a href="{% url 'main:home' %}">Main page</a> / 
+        <a href="{% url 'main:news' %}">News</a> / 
+        <a class="active">
+            ...
+        </a>
+    </div>
+    <h2 class="small-content news-detail__title">{{ news.title }}</h2>
+    <div class="news-detail__img-wrapper">
+        <div class="news-detail__img">
+            <img src="/media/{{ news.image }}" alt="">
+        </div>
+    </div>
+    <div class="news-detail__content">
+        <p>{{ news.content| safe }}</p>
+    </div>
+    <div class="news-detail__nav small-content">
+        {% if prev %}
+        <a href="{% url 'main:news_detail' pk=prev.pk %}" class="news-detail__nav-prev"><span>&lt;</span>Prev news</a>
+        {% endif %}
+        {% if next %}
+        <a href="{% url 'main:news_detail' pk=next.pk %}" class="news-detail__nav-next">Next news  <span>&gt;</span></a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

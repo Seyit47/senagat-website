@@ -1,0 +1,73 @@
+{% extends 'main/base.html' %}
+{% block title %}
+About the Ministry
+{% endblock %}
+{% block content %}
+<div class="about-us-content">
+    <div class="about-us__wrapper">
+        <div class="about-us__content" id="about-us__content">
+            <div class="small-content">
+                {% for site_settings in site_settings %}
+                {% autoescape off %}
+                    {{ site_settings.about_content }}                   
+                {% endautoescape %}
+                <video  preload="auto" controls>
+                    <source  src="/media/{{ site_settings.about_video }}" type="video/mp4">
+                </video>
+                {% endfor %}
+            </div>
+            <div class="about-us__gallery max-content">            
+                <div class="gallery__btn-wrapper dark">
+                    <div class="gallery__btn-prev"></div>
+                    <div class="gallery__btn-next"></div>
+                </div>
+                <h2 class="section-title black">
+                    Highlighted images
+                </h2>
+                <div class="gallery-wrapper">
+                    <div class="gallery__container container light-box-item-container">
+                        <!--{% if gallery.20 %}
+                            <div class="gallery__item item" data-src="/media/{{ gallery.20.image_crop }}">
+                                <div class="gallery__item-img-wrapper" >
+                                    <div class="gallery__item-img">
+                                        <img id="lastClone" src="/media/{{ gallery.20.thumbnail }}" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}-->
+                        {% for item in gallery %}
+                            <div class="gallery__item item" data-src="/media/{{ item.image_crop }}">
+                                <div class="gallery__item-img-wrapper" >
+                                    <div class="gallery__item-img">
+                                        <img src="/media/{{ item.thumbnail }}" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <!--{% if gallery.0 %}
+                            <div class="gallery__item item" data-src="/media/{{ gallery.0.image_crop }}">
+                                <div class="gallery__item-img-wrapper" >
+                                    <div class="gallery__item-img">
+                                        <img id="firstClone" src="/media/{{ gallery.0.thumbnail }}" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="light-box-wrapper none">
+        <div class="light-box-container">
+            <div class="light-box">
+                <img src="" alt="">
+            </div>
+            <div class="next-btn">›</div>
+            <div class="prev-btn">‹</div>
+            <div class="zoom-in-btn">+</div>
+            <div class="zoom-out-btn">-</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

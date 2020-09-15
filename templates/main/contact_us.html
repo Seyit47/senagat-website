@@ -1,0 +1,120 @@
+{% extends 'main/base.html' %}
+{% block title %}
+Contact us
+{% endblock %}
+{% block content %}
+<div class="contact-us-content">
+    <div class="contact__ministry-wrapper">
+        <div class="ministry__contact show">
+            <div class="ministry__contact-wrapper">
+                <h2 class="ministry__name">
+                    Ministry of Industry and Construction Production of Turkmenistan
+                </h2>
+                <div class="ministry__contact-details">
+                    <div class="contact-details__phone contact-detail__item">
+                        {% for site_settings in site_settings %}
+                        <h6>
+                            Phone numbers:
+                        </h6>
+                        <p>
+                            {{ site_settings.contact_phone | linebreaks }}
+                        </p>
+                    </div>
+                    <div class="contact-details__address contact-detail__item">
+                        <h6>
+                            Legal address:
+                        </h6>
+                        <p>
+                            {{ site_settings.contact_address | linebreaks }}
+                        </p>
+                    </div>
+                    <div class="contact-details__fax contact-detail__item">
+                        <h6>
+                            Fax
+                        </h6>
+                        <p>
+                            {{ site_settings.contact_fax | linebreaks }}
+                        </p>
+                    </div>
+                    <div class="contact-details__email contact-detail__item">
+                        <h6>
+                            E-mail address
+                        </h6>
+                        <p>
+                            {{ site_settings.contact_email | linebreaks }}
+                        </p>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="ministry__feed-back">
+                    <form   method="POST"
+                            enctype="application/x-www-form-urlencoded"
+                            name="fead-back"
+                            data-url="">
+                        {% csrf_token %}
+                        <div class="input-wrapper half">
+                            <label for="">Name, Surname</label>
+                            {{ forms.fullname }}
+                        </div>
+                        <div class="input-wrapper half mg-left">
+                            <label for="">E-mail address</label>
+                            {{ forms.email }}
+                        </div>
+                        <div class="input-wrapper">
+                            <label  for="message">Your letter</label>
+                            {{ forms.message }}
+                        </div>
+                        <button type="submit"
+                                class="feed-back__send">
+                            Send
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="location">
+        <div id="map">
+            <script type="text/javascript" charset="utf-8" async src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A5bdb819db39b5002abe8d907ce3c567f5e960a778a17c4e47e93ef51a57dded4&amp;width=100%&amp;height=100%&amp;lang=ru_RU&amp;scroll=false"></script>
+        </div>
+    </div>
+    <div class="contact__other-wrapper max-content">
+        <div class="others__container">
+            {% for assocation in assocations %}
+                <div class="others__item">
+                    <h3 class="others__item-title">
+                        {{ assocation.name }}
+                    </h3>
+                    <div class="other__contact-details">
+                        <div class="contact-detail__item half">
+                            <h6>
+                                Phone numbers
+                            </h6>
+                            <p>
+                                {{ assocation.phone | linebreaks }}
+                            </p>
+                        </div>
+                        <div class="contact-detail__item quarter">
+                            <h6>
+                                Fax
+                            </h6>
+                            <p>
+                                {{ assocation.fax | linebreaks}}
+                            </p>
+                        </div>
+                        <div class="contact-detail__item quarter">
+                            <h6>
+                                Legal address
+                            </h6>
+                            <p>
+                                {{ assocation.address }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

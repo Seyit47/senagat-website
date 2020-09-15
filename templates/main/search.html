@@ -1,0 +1,58 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<div class="news__content max-content">
+    <h2 class="section-title black">
+        Search results
+    </h2>
+    <h2 class="section-title black">
+        News
+    </h2>
+<div class="news__container">
+    {% for item in item %}
+    <a href="/news/{{ item.id }}" class="news__item">
+        <div class="news__item-img">
+            <div class="news__item-img-blur">
+                <img src="{{ item.thumbnail }}" alt="">
+            </div>
+        </div>
+        <div class="news__item-content">
+            <p class="news__item-date">
+                {{ item.published_date | date:"d M, Y" }}
+            </p>
+            <h4 class="news__item-title">
+                {{ item.title | truncatechars:100 }}
+            </h4>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+
+<div class="tenders-content max-content">
+    <h2 class="section-title black">
+        Tenders
+    </h2>
+<div class="tenders__container">
+    {% for item in tenders %}
+    <a href="/tender/{{ item.id }}" class="tenders__item">
+        <div class="tenders__item-img-wrapper">
+            <div class="tenders__item-img">
+                <img src="{{ item.thumbnail }}" alt="">
+            </div>
+        </div>
+        <div class="tenders__item-content">
+            <p class="tenders__item-date">
+                {{ item.published_date | date:"d M, Y" }}
+            </p>
+            <h3 class="tenders__item-title">
+                {{ item.title | truncatechars:150}}
+            </h3>
+            <p class="tenders__item-description">
+                {{ item.content | striptags | safe |truncatewords:31 }}
+            </p>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+</div>
+</div>
+{% endblock %}

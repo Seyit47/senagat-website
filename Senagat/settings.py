@@ -148,9 +148,8 @@ CELERY_ACCEPT_CONTENT  = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_BACKEND  = 'django-db'
 
-EMAIL_HOST          = 'localhost'
-EMAIL_PORT          = 25
-EMAIL_HOST_USER     = 'seyit@gmail.com'
-EMAIL_HOST_PASSWORD = 'l0g1t3sh'
+EMAIL_HOST          = 'smtp.gmail.com'
+EMAIL_PORT          = 587
+EMAIL_HOST_USER     = 'seyitmyratgeldiyev3012@gmail.com'
+EMAIL_HOST_PASSWORD = 'vvvpfqhzocowpjfz'
 EMAIL_USE_TLS       = True
-EMAIL_USE_SSL       = False

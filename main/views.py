@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect
 from django.utils import timezone
 from .models import *
 from .helpers import get_pagination, get_day_time
-from .forms import *
 from .documents import NewsDocument, TenderDocument
-from api_v1.tasks import send_email_task
+from django.core.mail import send_mail
+from api_v1.tasks import *
 
 
 def home(request):
@@ -14,7 +14,6 @@ def home(request):
     factories = Factory.objects.all().order_by('created_date')
     tender = Tender.objects.all().order_by('-created_date')[:4]
     day_time = get_day_time(timezone.localtime())
-    send_email_task()
 
     q = request.GET.get('q')
 
@@ -208,22 +207,46 @@ def contact_us(request):
     else:
         item = ''
 
-    if request.method == 'POST':
-        forms = ContactForm(request.POST)
-        if forms.is_valid():
-            message = forms.save(commit=False)
+    '''if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
             message.save()
             return redirect('main:contact_us')
     else:
-        forms = ContactForm()
+        form = ContactForm()'''
 
+    if request.method == 'POST':
+        message_name = request.POST['message-name']
+        message_email = request.POST['message-email']
+        message = request.POST['message']
+
+        messages = Contact_us.objects.create(
+            fullname = message_name,
+            email = message_email,
+            message = message,
+        )
+
+        send_mail(
+            message_name,
+            message,
+            message_email,
+            ['seyitbu1111@gmail.com']
+        )
+        return render(request, 'main/contact_us.html', 
+        {'message_name':message_name,
+        'assocations':assocations,
+        'site_settings':site_settings,
+        'page':'contact_us',
+        'item':item,
+        })
+    
     return render(request, 'main/contact_us.html', 
     {
         'assocations':assocations,
         'site_settings':site_settings,
         'page':'contact_us',
-        'forms':forms,
-        'item':item
+        'item':item,
     })
 
 def search(request):

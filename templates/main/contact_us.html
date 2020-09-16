@@ -3,10 +3,20 @@
 Contact us
 {% endblock %}
 {% block content %}
-<div class="contact-us-content">
+{% if message_name %}
+<div class="contact-us-content" style="padding: 0;">
+    {% else %}
+    <div class="contact-us-content">
+    {% endif %}
     <div class="contact__ministry-wrapper">
         <div class="ministry__contact show">
             <div class="ministry__contact-wrapper">
+                {% if message_name %}
+                <center>
+                    <h2>Thanks {{ message_name }}</h2>
+                    <p>We are received your message!</p>
+                </center>     
+                {% else %}
                 <h2 class="ministry__name">
                     Ministry of Industry and Construction Production of Turkmenistan
                 </h2>
@@ -54,16 +64,16 @@ Contact us
                             data-url="">
                         {% csrf_token %}
                         <div class="input-wrapper half">
-                            <label for="">Name, Surname</label>
-                            {{ forms.fullname }}
+                            <label for="">Name, surname</label>
+                            <input type="text" name="message-name" id="" class="base-input" placeholder="Name, surname"required>
                         </div>
                         <div class="input-wrapper half mg-left">
                             <label for="">E-mail address</label>
-                            {{ forms.email }}
+                            <input type="email" name="message-email" class="base-input" placeholder="E-mail address"required>
                         </div>
                         <div class="input-wrapper">
                             <label  for="message">Your letter</label>
-                            {{ forms.message }}
+                            <textarea rows="8" name="message" class="base-input" placeholder="Your letter"required></textarea>
                         </div>
                         <button type="submit"
                                 class="feed-back__send">
@@ -116,5 +126,6 @@ Contact us
             {% endfor %}
         </div>
     </div>
+    {% endif %}
 </div>
 {% endblock %}

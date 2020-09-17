@@ -12,5 +12,6 @@ urlpatterns = [
     path('tender/<int:pk>', tender_detail, name='tender_detail'),
     path('documents/', document, name='document'),
     path('contact_us/', contact_us, name='contact_us'),
-    path('search/', search, name='search')
+    path('search/', search, name='search'),
+    path('online-order/', order, name='order')
 ]

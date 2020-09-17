@@ -5,6 +5,7 @@ from .helpers import get_pagination, get_day_time
 from .documents import NewsDocument, TenderDocument
 from django.core.mail import send_mail
 from api_v1.tasks import *
+from modules.constants import *
 
 
 def home(request):
@@ -207,25 +208,17 @@ def contact_us(request):
     else:
         item = ''
 
-    '''if request.method == 'POST':
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            message = form.save(commit=False)
-            message.save()
-            return redirect('main:contact_us')
-    else:
-        form = ContactForm()'''
-
     if request.method == 'POST':
         message_name = request.POST['message-name']
         message_email = request.POST['message-email']
         message = request.POST['message']
 
+        
         messages = Contact_us.objects.create(
             fullname = message_name,
             email = message_email,
             message = message,
-        )
+        )   
 
         send_mail(
             message_name,
@@ -268,4 +261,59 @@ def search(request):
     {
         'item':item,
         'tenders':tenders,
+    })
+
+def order(request):
+    site_settings = Settings.objects.all()
+
+    if request.method == 'POST':
+        product = request.POST['product']
+        who_is = request.POST['who_is']
+        fullname = request.POST['fullname']
+        organization = request.POST['organization']
+        phone = request.POST['phone']
+        email = request.POST['email']
+        capacity = request.POST['capacity']
+        shipping_method = request.POST['shipping_method']
+        letter = request.FILES['letter']
+        contract = request.FILES['contract']
+        certificate = request.FILES['certificate']
+        wes_certificate = request.FILES['wes_certificate']
+        state_license = request.FILES['state_license']
+        egrpo = request.FILES['egrpo']
+        banking_details = request.FILES['banking_details']
+
+        orders = Order.objects.create(
+            product = product,
+            phone = phone,
+            fullname = fullname,
+            who_is = who_is,
+            organization = organization,
+            email = email,
+            capacity = capacity,
+            shipping_method = shipping_method,
+            letter = letter,
+            contract = contract,
+            certificate = certificate,
+            wes_certificate = wes_certificate,
+            state_license = state_license,
+            egrpo = egrpo,
+            banking_details = banking_details 
+        )
+
+        send_mail(
+            product,
+            fullname,
+            email,
+            ['seyitbu1111@gmail.com']
+        )
+
+
+    return render(request, 'main/order.html', 
+    {
+        'site_settings':site_settings,
+        'page':'order',
+        'products':ONLINE_ORDER_PRODUCTS,
+        'shipping_methods':ONLINE_ORDER_SHIPPING_METHODS,
+        'who_is':ONLINE_ORDER_WHO_IS
     })

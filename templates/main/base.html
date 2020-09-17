@@ -4,6 +4,7 @@
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{% static 'images/favicon.ico' %}">
     <link rel="stylesheet" href="odometer-theme-car.css" />
     <link rel="stylesheet" href="{% static 'main/base.css' %}">
     <title>{% block title %}{% endblock %}</title>
@@ -27,7 +28,7 @@
             {% if page != 'about_us' %}
             <div>
                 <a href="{% url 'main:home' %}" style="text-decoration: none; color: inherit;">
-                    <div class="logo-img">           
+                    <div class="logo-img">
                         <img src="../static/images/logo_light.png" alt="">
                     </div>
                     <h2 class="logo-title">
@@ -73,7 +74,7 @@
                             <a {% if page == 'contact_us' %}class="active"{% endif %} href="{% url 'main:contact_us' %}">Contact us</a>
                         </li>
                         <li>
-                            <a href="">Online order</a>
+                            <a {% if page == 'order' %}class="active"{% endif %} href="{% url 'main:order' %}">Online order</a>
                         </li>
                     </ul>
                 </div>

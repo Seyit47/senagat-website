@@ -1,5 +1,3 @@
-
-
 def get_pagination(page, count, limit = 5):
     try:
         page = int(page)
@@ -21,8 +19,6 @@ def get_pagination(page, count, limit = 5):
         'lastpage': lastpage,
         'pages': pages    
     }
-
-
 
 def get_day_time(date):
     h = date.hour

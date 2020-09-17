@@ -129,3 +129,30 @@ class Contact_us(models.Model):
 
     def __str__(self):
         return self.fullname
+
+class Order(models.Model):
+    phone = models.CharField(max_length = 50)
+    email = models.CharField(max_length = 50)
+    product = models.CharField(max_length = 100)
+    who_is  = models.CharField(max_length = 100)
+    fullname = models.CharField(max_length = 200)
+    capacity = models.IntegerField()
+    organization    = models.CharField(max_length = 200)
+    shipping_method = models.CharField(max_length = 100)
+    egrpo    = models.FileField(upload_to = 'order_files/egrpo')
+    letter   = models.FileField(upload_to = 'order_files/letter')
+    contract = models.FileField(upload_to = 'order_files/contract')
+    certificate   = models.FileField(upload_to = 'order_files/certificate')
+    state_license = models.FileField(upload_to = 'order_files/state_license')
+    wes_certificate = models.FileField(upload_to = 'order_files/wes_certificate')
+    banking_details = models.FileField(upload_to = 'order_files/banking_details')
+
+    published_date      = models.DateTimeField(default = timezone.now)
+    created_date = models.DateTimeField(default = timezone.now)
+
+    class Meta:
+        verbose_name = 'Order'
+        verbose_name_plural = 'Orders'
+
+    def __str__(self):
+        return self.fullname

@@ -1,0 +1,328 @@
+{% extends 'main/base.html' %}
+{% block title %}
+Online order
+{% endblock %}
+{% block content %}
+<div class="online-order-content max-content">
+    <div class="small-content">
+        <p class="online-order__note-phone">
+            +993(12) 27-24-20<br>
+            +993(12) 27-23-98
+        </p>
+        <p class="online-order__note">
+            You can specify the details on the following numbers: <span>+993(12) 27-24-20, +993(12) 27-23-98</span><br><br>
+            Note: After submitting documents via the online form, additional documents may also be requested
+        </p>
+        
+        <div class="online-order__form">
+            <form   name="online-order-form"
+                    method="POST"
+                    enctype="multipart/form-data"
+                    data-url="">
+                    {% csrf_token %}
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <p>
+                                    Choose product
+                                </p>
+                            </td>
+                            <td>
+                                <div class="base-select">
+                                    <select id="product" 
+                                            name="product"
+                                            required>
+                                        <option value="" disabled></option>
+                                        {% for item in products %}
+                                        <option value="{{ item }}">{{ item }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    Who is
+                                </p>
+                            </td>
+                            <td>
+                                <div class="base-select">
+                                    <select id="who_is" 
+                                            name="who_is" 
+                                            class="select"
+                                            required>
+                                        <option value="" disabled></option>
+                                        {% for item in who_is %}
+                                        <option value="{{ item }}">{{ item }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    Name, surname
+                                </p>
+                            </td>
+                            <td>
+                                <input  id="fullname"
+                                        name="fullname"
+                                        class="base-input" 
+                                        type="text" 
+                                        placeholder="Name, surname"
+                                        required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    Name of the organization
+                                </p>
+                            </td>
+                            <td>
+                                <input  id="organization"
+                                        name="organization"
+                                        class="base-input" 
+                                        type="text"
+                                        placeholder="Name of the organization"
+                                        required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    Phone
+                                </p>
+                            </td>
+                            <td>
+                                <input  id="phone"
+                                        name="phone"
+                                        class="base-input"
+                                        type="text"
+                                        placeholder="+993 65 656565"
+                                        required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    Email
+                                    
+                                </p>
+                            </td>
+                            <td>
+                                <input  id="email"
+                                        name="email"
+                                        class="base-input"  
+                                        type="text"
+                                        placeholder="Email"
+                                        required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    Order capacity, tons
+                                </p>
+                            </td>
+                            <td>
+                                <input  id="capacity"
+                                        name="capacity"
+                                        class="base-input"
+                                        type="text" 
+                                        placeholder="Order capacity, tons"
+                                        required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    Shipping method
+                                </p>
+                            </td>
+                            <td>
+                                <div class="base-select">
+                                    <select id="shipping_method"
+                                            name="shipping_method"
+                                            required>
+                                        <option value="" disabled></option>
+                                        {% for item in shipping_methods %}
+                                        <option value="{{ item }}">{{ item }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>  
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    Letter of appeal from the customer and contractor
+                                </p>
+                            </td>
+                            <td>
+                                <div class="base-file-input">
+                                    <input  id="letter"
+                                            name="letter"
+                                            class="base-input"
+                                            type="file"
+                                            accept="image/jpeg,image/png,application/pdf,.doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                            onchange="onChange(event)"
+                                            data-placeholder="Attach a file..."
+                                            required>
+                                    <div class="fake">
+                                        Attach a file...
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    The main contract registered by the SCEoT and ME&R
+                                    
+                                </p>
+                            </td>
+                            <td>
+                                <div class="base-file-input">
+                                    <input  id="contract"
+                                            name="contract"
+                                            class="base-input" 
+                                            type="file"
+                                            accept="image/jpeg,image/png,application/pdf,.doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                            onchange="onChange(event)"
+                                            data-placeholder="Attach a file..."
+                                            required>
+                                    <div class="fake">
+                                        Attach a file...
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    Certificate of registration in the unified register of Turkmenistan
+                                </p>
+                            </td>
+                            <td>
+                                <div class="base-file-input">
+                                    <input  id="certificate"
+                                            name="certificate"
+                                            class="base-input" 
+                                            type="file"
+                                            accept="image/jpeg,image/png,application/pdf,.doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                            onchange="onChange(event)"
+                                            data-placeholder="Attach a file..."
+                                            required>
+                                    <div class="fake">
+                                        Attach a file...
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    Certificate on the external economic activities
+                                </p>
+                            </td>
+                            <td>
+                                <div class="base-file-input">
+                                    <input  id="wes_certificate"
+                                            name="wes_certificate"
+                                            class="base-input" 
+                                            type="file"
+                                            accept="image/jpeg,image/png,application/pdf,.doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                            onchange="onChange(event)"
+                                            data-placeholder="Attach a file..."
+                                            required>
+                                    <div class="fake">
+                                        Attach a file...
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    State license (for types of work)
+                                </p>
+                            </td>
+                            <td>
+                                <div class="base-file-input">
+                                    <input  id="state_license"
+                                            name="state_license"
+                                            class="base-input"
+                                            type="file"
+                                            accept="image/jpeg,image/png,application/pdf,.doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                            onchange="onChange(event)"
+                                            data-placeholder="Attach a file..."
+                                            required>
+                                    <div class="fake">
+                                        Attach a file...
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    EGRPO
+                                </p>
+                            </td>
+                            <td>
+                                <div class="base-file-input">
+                                    <input  id="egrpo"
+                                            name="egrpo"
+                                            class="base-input"
+                                            type="file"
+                                            accept="image/jpeg,image/png,application/pdf,.doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                            onchange="onChange(event)"
+                                            data-placeholder="Attach a file..."
+                                            required>
+                                    <div class="fake">
+                                        Attach a file...
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    Details (banking and legal)
+                                </p>
+                            </td>
+                            <td>
+                                <div class="base-file-input">
+                                    <input  id="banking_details"
+                                            name="banking_details"
+                                            class="base-input"
+                                            type="file"
+                                            accept="image/jpeg,image/png,application/pdf,.doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                            onchange="onChange(event)"
+                                            data-placeholder="Attach a file..."
+                                            required>
+                                    <div class="fake">
+                                        Attach a file...
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="online-order__note-btm">
+                    * Documents should only be sent in formats:<br> .jpg, .jpeg, .png, .doc, .docx, .pdf
+                </p>
+                <button class="online-order__send-btn"
+                        type="submit">
+                    Send
+                </button>
+            </form>
+        </div>
+    </div>
+    
+</div>
+{% endblock %}

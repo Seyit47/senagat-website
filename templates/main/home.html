@@ -1,29 +1,31 @@
 {% extends 'main/base.html' %}
 {% block title %}
-Main page
+{% load i18n %}
+{% trans 'Main page' %}
 {% endblock %}
 {% block content %}
+{% load i18n %}
 <div class="home-content">
     <div class="president-content max-content">
         <div class="president-slog__slider-wrapper">
             <div class="president-slog__slider">
                 <h2>
-                    President of Turkmenistan Gurbanguly Berdimuhamedov:
+                    {% trans 'President of Turkmenistan Gurbanguly Berdimuhamedov:' %}
                 </h2>
             
                 <div class="president-slog__slide">
                     <p>
-                        "We have set high goals for the industrial development of our country, to make it one of the leading countries in the world, to further improve the welfare of our people."
+                        {% trans '«We have set high goals for the industrial development of our country, to make it one of the leading countries in the world, to further improve the welfare of our people.»' %}
                     </p>
                 </div>
                 <div class="president-slog__slide">
                     <p>
-                        "The industrial complex should be the leader of other sectors of the economy, as it is the basis for the future development of these sectors."
+                        {% trans '«The industrial complex should be the leader of other sectors of the economy, as it is the basis for the future development of these sectors.»' %}
                     </p>
                 </div>
                 <div class="president-slog__slide">
                     <p>
-                        "We need to educate highly qualified, hardworking, progressive, highly qualified specialists who are well experienced in advanced technologies."
+                        {% trans '«We need to educate highly qualified, hardworking, progressive, highly qualified specialists who are well experienced in advanced technologies.»' %}
                     </p>
                 </div>
                 <div class="president-slog__slide-outline">

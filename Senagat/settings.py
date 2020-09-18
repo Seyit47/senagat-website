@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import django-heroku
+import dj_database_url
+from decouple import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -40,6 +43,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'main',
     'administrator',
+    'translations',
     'django_elasticsearch_dsl',
     'api_v1',
     'django_celery_results',
@@ -54,11 +58,13 @@ ELASTICSEARCH_DSL = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'Senagat.urls'
@@ -118,6 +124,11 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
+LANGUAGES = (
+    ('tr', 'Turkmen'),
+    ('en', 'English'),
+    ('ru', 'Russian'),
+)
 
 TIME_ZONE = 'Asia/Ashgabat'
 
@@ -127,9 +138,14 @@ USE_L10N = True
 
 USE_TZ = True
 
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale')
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
+
+STATIC_URL = '/static/'
 
 if DEBUG == True:     
     STATICFILES_DIRS = [
@@ -138,7 +154,7 @@ if DEBUG == True:
 else:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-STATIC_URL = '/static/'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -153,3 +169,5 @@ EMAIL_PORT          = 587
 EMAIL_HOST_USER     = 'seyitmyratgeldiyev3012@gmail.com'
 EMAIL_HOST_PASSWORD = 'vvvpfqhzocowpjfz'
 EMAIL_USE_TLS       = True
+
+django-heroku.settings(locals())

@@ -1,9 +1,11 @@
 from django.db import models
 from django.utils import timezone
 from ckeditor.fields import RichTextField
+from translations.models import Translatable
+from translations.admin import TranslatableAdmin, TranslationInline
 
 
-class Settings(models.Model):
+class Settings(Translatable):
     about_content = RichTextField()
     about_video = models.FileField(upload_to ='document/video')
     contact_fax = models.TextField()
@@ -20,6 +22,12 @@ class Settings(models.Model):
 
     def __str__(self):
         return self.document_title
+    
+    class TranslatableMeta:
+        fields = ['about_content', 'contact_fax', 'contact_address', 'document_title', 'document_content']
+
+class SettingsAdmin(TranslatableAdmin):
+    inlines = [TranslationInline,]
 
 class News(models.Model):
     title = models.CharField(max_length=200)
@@ -35,12 +43,18 @@ class News(models.Model):
         verbose_name = 'News'
         verbose_name_plural = 'News'
 
+    class TranslatableMeta:
+        fields = ['title', 'content']
+
     def publish(self):
         self.published_date = timezone.now()
         self.save()
 
     def __str__(self):
         return self.title
+
+class NewsAdmin(TranslatableAdmin):
+    inlines = [TranslationInline,]
 
 class Magazine(models.Model):
     title = models.CharField(max_length=50)
@@ -88,7 +102,7 @@ class Tender(models.Model):
 
 class Factory(models.Model):
     title = models.CharField(max_length=200)
-    content = RichTextField(default='')
+    content = models.TextField()
     thumbnail = models.ImageField(upload_to='factory/thumbnail')
     video = models.FileField(upload_to='factory/video', null=True, blank=True)
     created_date = models.DateTimeField(default=timezone.now)

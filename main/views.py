@@ -300,10 +300,11 @@ def order(request):
             egrpo = egrpo,
             banking_details = banking_details 
         )
+        
 
         send_mail(
-            product,
             fullname,
+            product,
             email,
             ['seyitbu1111@gmail.com']
         )

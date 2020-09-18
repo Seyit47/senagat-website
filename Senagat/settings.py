@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-import django-heroku
+import django_heroku
 import dj_database_url
 from decouple import config
 
@@ -170,4 +170,4 @@ EMAIL_HOST_USER     = 'seyitmyratgeldiyev3012@gmail.com'
 EMAIL_HOST_PASSWORD = 'vvvpfqhzocowpjfz'
 EMAIL_USE_TLS       = True
 
-django-heroku.settings(locals())
+django_heroku.settings(locals())

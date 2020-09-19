@@ -259,10 +259,10 @@ def contact_us(request):
                     'item':item,
                 })
             else:
-                logger.exception('func: online_order; msg: Catched exception invalid form ')
+                logger.exception('func: contact_us; msg: Catched exception invalid form ')
                 return BAD_REQUEST
         except ExceptionInvalidForm:
-            logger.exception('func: online_order; msg: Catched exception invalid form ')
+            logger.exception('func: contact_us; msg: Catched exception invalid form ')
             return BAD_REQUEST
     
     return render(request, 'main/contact_us.html', 
@@ -298,47 +298,70 @@ def order(request):
     site_settings = Settings.objects.all()
 
     if request.method == 'POST':
-        product = request.POST['product']
-        who_is = request.POST['who_is']
-        fullname = request.POST['fullname']
-        organization = request.POST['organization']
-        phone = request.POST['phone']
-        email = request.POST['email']
-        capacity = request.POST['capacity']
-        shipping_method = request.POST['shipping_method']
-        letter = request.FILES['letter']
-        contract = request.FILES['contract']
-        certificate = request.FILES['certificate']
-        wes_certificate = request.FILES['wes_certificate']
-        state_license = request.FILES['state_license']
-        egrpo = request.FILES['egrpo']
-        banking_details = request.FILES['banking_details']
+        form = {}
+        form['product'] = request.POST.get('product', '')
+        form['who_is'] = request.POST.get('who_is', '')
+        form['fullname'] = request.POST.get('fullname', '')
+        form['organization'] = request.POST.get('organization', '')
+        form['phone'] = request.POST.get('phone', '')
+        form['email'] = request.POST.get('email', '')
+        form['capacity'] = request.POST.get('capacity', '')
+        form['shipping_method'] = request.POST.get('shipping_method', '')
 
-        orders = Order.objects.create(
-            product = product,
-            phone = phone,
-            fullname = fullname,
-            who_is = who_is,
-            organization = organization,
-            email = email,
-            capacity = capacity,
-            shipping_method = shipping_method,
-            letter = letter,
-            contract = contract,
-            certificate = certificate,
-            wes_certificate = wes_certificate,
-            state_license = state_license,
-            egrpo = egrpo,
-            banking_details = banking_details 
-        )
-        
+        form['letter'] = request.FILES.get('letter', '')
+        form['contract'] = request.FILES.get('contract', '')
+        form['certificate'] = request.FILES.get('certificate', '')
+        form['wes_certificate'] = request.FILES.get('wes_certificate', '')
+        form['state_license'] = request.FILES.get('state_license', '')
+        form['egrpo'] = request.FILES.get('egrpo', '')
+        form['banking_details'] = request.FILES.get('banking_details', '')
 
-        send_mail(
-            fullname,
-            product,
-            email,
-            ['seyitbu1111@gmail.com']
-        )
+        try:
+            recaptcha_response = request.POST.get('g-recaptcha-response')
+            url = 'https://www.google.com/recaptcha/api/siteverify'
+            values = {
+                'secret':settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+                'response':recaptcha_response
+            }
+
+            data = urllib.parse.urlencode(values).encode()
+            req = urllib.request.Request(url, data=data)
+            response = urllib.request.urlopen(req)
+            result = json.loads(response.read().decode())
+
+            if result['success']:
+                orders = Order.objects.create(
+                    product = form['product'],
+                    phone = form['phone'],
+                    fullname = form['fullname'],
+                    who_is = form['who_is'],
+                    organization = form['organization'],
+                    email = form['email'],
+                    capacity = form['capacity'],
+                    shipping_method = form['shipping_method'],
+                    letter = form['letter'],
+                    contract = form['contract'],
+                    certificate = form['certificate'],
+                    wes_certificate = form['wes_certificate'],
+                    state_license = form['state_license'],
+                    egrpo = form['egrpo'],
+                    banking_details = form['banking_details'] 
+                )
+            
+
+                send_mail(
+                    form['fullname'],
+                    form['product'],
+                    form['email'],
+                    ['seyitbu1111@gmail.com']
+                )
+            else:
+                logger.exception('func: contact_us; msg: Catched exception invalid form ')
+                return BAD_REQUEST
+
+        except ExceptionInvalidForm:
+            logger.exception('func: contact_us; msg: Catched exception invalid form ')
+            return BAD_REQUEST
 
 
     return render(request, 'main/order.html', 

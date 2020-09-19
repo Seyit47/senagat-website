@@ -61,7 +61,7 @@ Contact us
                     <form   method="POST"
                             enctype="application/x-www-form-urlencoded"
                             name="fead-back"
-                            data-url="">
+                            data-url="{% url 'api_v1:contact_us' %}">
                         {% csrf_token %}
                         <div class="input-wrapper half">
                             <label for="">Name, surname</label>
@@ -75,6 +75,16 @@ Contact us
                             <label  for="message">Your letter</label>
                             <textarea rows="8" name="message" class="base-input" placeholder="Your letter"required></textarea>
                         </div>
+                        <div class="g-recaptcha" data-sitekey="6LdrGs4ZAAAAAGqlTvftOXHSYRVgkKlX147FumMS"></div>
+                        {% if messages %}
+                        <ul>
+                        {% for message in messages %}
+                        <div class="{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                        </ul>
+                        {% endif %}
                         <button type="submit"
                                 class="feed-back__send">
                             Send

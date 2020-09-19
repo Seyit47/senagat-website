@@ -6,7 +6,15 @@ from .documents import NewsDocument, TenderDocument
 from django.core.mail import send_mail
 from api_v1.tasks import *
 from modules.constants import *
+from django import forms
+from django.conf import settings
+import json
+import urllib
+import logging
+from .responses import BAD_REQUEST
+from modules.exceptions import ExceptionInvalidForm
 
+logger = logging.getLogger(__name__)
 
 def home(request):
     site_settings = Settings.objects.all()
@@ -197,6 +205,7 @@ def document(request):
         'item':item
     })
 
+
 def contact_us(request):
     assocations = AssocationContacts.objects.all().order_by('-create_ts')
     site_settings = Settings.objects.all()
@@ -208,31 +217,53 @@ def contact_us(request):
     else:
         item = ''
 
+
     if request.method == 'POST':
-        message_name = request.POST['message-name']
-        message_email = request.POST['message-email']
-        message = request.POST['message']
+        form = {}
+        form['message_name'] = request.POST.get('message-name', '')
+        form['message_email'] = request.POST.get('message-email', '')
+        form['message'] = request.POST.get('message', '')
+    
 
+        try:
+            recaptcha_response = request.POST.get('g-recaptcha-response')
+            url = 'https://www.google.com/recaptcha/api/siteverify'
+            values = {
+                'secret':settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+                'response':recaptcha_response
+            }
+
+            data = urllib.parse.urlencode(values).encode()
+            req = urllib.request.Request(url, data=data)
+            response = urllib.request.urlopen(req)
+            result = json.loads(response.read().decode())
         
-        messages = Contact_us.objects.create(
-            fullname = message_name,
-            email = message_email,
-            message = message,
-        )   
+            if result['success']:
+                messages = Contact_us.objects.create(
+                    fullname = form['message_name'],
+                    email = form['message_email'],
+                    message = form['message'],
+                )   
 
-        send_mail(
-            message_name,
-            message,
-            message_email,
-            ['seyitbu1111@gmail.com']
-        )
-        return render(request, 'main/contact_us.html', 
-        {'message_name':message_name,
-        'assocations':assocations,
-        'site_settings':site_settings,
-        'page':'contact_us',
-        'item':item,
-        })
+                send_mail(
+                    form['message_name'],
+                    form['message'],
+                    form['message_email'],
+                    ['seyitbu1111@gmail.com']
+                )
+                return render(request, 'main/contact_us.html', 
+                    {'message_name':form['message_name'],
+                    'assocations':assocations,
+                    'site_settings':site_settings,
+                    'page':'contact_us',
+                    'item':item,
+                })
+            else:
+                logger.exception('func: online_order; msg: Catched exception invalid form ')
+                return BAD_REQUEST
+        except ExceptionInvalidForm:
+            logger.exception('func: online_order; msg: Catched exception invalid form ')
+            return BAD_REQUEST
     
     return render(request, 'main/contact_us.html', 
     {
@@ -318,3 +349,5 @@ def order(request):
         'shipping_methods':ONLINE_ORDER_SHIPPING_METHODS,
         'who_is':ONLINE_ORDER_WHO_IS
     })
+
+

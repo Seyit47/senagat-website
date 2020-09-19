@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django_elasticsearch_dsl',
     'api_v1',
     'django_celery_results',
+    'captcha',
 ]
 
 ELASTICSEARCH_DSL = {
@@ -171,3 +172,6 @@ EMAIL_HOST_PASSWORD = 'vvvpfqhzocowpjfz'
 EMAIL_USE_TLS       = True
 
 django_heroku.settings(locals())
+
+GOOGLE_RECAPTCHA_SECRET_KEY = '6LdrGs4ZAAAAADAKqhartW3FSTa7a7R1o7LoSO-k'
+

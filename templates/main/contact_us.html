@@ -61,32 +61,31 @@ Contact us
                     <form   method="POST"
                             enctype="application/x-www-form-urlencoded"
                             name="fead-back"
+                            id="feed-back"
                             data-url="{% url 'api_v1:contact_us' %}">
                         {% csrf_token %}
+                        <div id="error"></div>
                         <div class="input-wrapper half">
                             <label for="">Name, surname</label>
-                            <input type="text" name="message-name" id="" class="base-input" placeholder="Name, surname"required>
+                            <input type="text" name="message-name" id="name" class="base-input" placeholder="Name, surname"required>
                         </div>
                         <div class="input-wrapper half mg-left">
                             <label for="">E-mail address</label>
-                            <input type="email" name="message-email" class="base-input" placeholder="E-mail address"required>
+                            <input type="email" name="message-email" id="message-email" class="base-input" placeholder="E-mail address"required>
                         </div>
                         <div class="input-wrapper">
                             <label  for="message">Your letter</label>
-                            <textarea rows="8" name="message" class="base-input" placeholder="Your letter"required></textarea>
+                            <textarea rows="8" name="message" id="message" class="base-input" placeholder="Your letter"required></textarea>
                         </div>
-                        <div class="g-recaptcha" data-sitekey="6LdrGs4ZAAAAAGqlTvftOXHSYRVgkKlX147FumMS"></div>
-                        {% if messages %}
-                        <ul>
-                        {% for message in messages %}
-                        <div class="{{ message.tags }}">
-                            {{ message }}
+                        <div class="captcha_image">
+                            {% for image in captcha %}
+                            <img src="/static/{{ image }}" alt="">
+                            {% endfor %}
                         </div>
-                        {% endfor %}
-                        </ul>
-                        {% endif %}
+                        <div class="g-recaptcha" data-callback="recaptchaCallback" data-theme="dark" data-sitekey="6LdrGs4ZAAAAAGqlTvftOXHSYRVgkKlX147FumMS"></div>
                         <button type="submit"
-                                class="feed-back__send">
+                                id="send-button"
+                                class="feed-back__send" >
                             Send
                         </button>
                     </form>

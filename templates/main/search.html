@@ -1,12 +1,19 @@
 {% extends 'main/base.html' %}
+{% block title %}
+Search
+{% endblock %}
 {% block content %}
 <div class="news__content max-content">
     <h2 class="section-title black">
         Search results
     </h2>
+    {% if item %}
     <h2 class="section-title black">
         News
     </h2>
+    {% else %}
+    <h2>News not found</h2>
+    {% endif %}
 <div class="news__container">
     {% for item in item %}
     <a href="/news/{{ item.id }}" class="news__item">
@@ -28,9 +35,11 @@
 </div>
 
 <div class="tenders-content max-content">
+    {% if tenders %}
     <h2 class="section-title black">
         Tenders
     </h2>
+    {% endif %}
 <div class="tenders__container">
     {% for item in tenders %}
     <a href="/tender/{{ item.id }}" class="tenders__item">

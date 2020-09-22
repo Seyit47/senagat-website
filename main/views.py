@@ -13,6 +13,12 @@ import urllib
 import logging
 from .responses import BAD_REQUEST
 from modules.exceptions import ExceptionInvalidForm
+from math import floor
+from random import random
+from captcha.image import ImageCaptcha
+
+
+
 
 logger = logging.getLogger(__name__)
 
@@ -217,14 +223,25 @@ def contact_us(request):
     else:
         item = ''
 
+    
+
+    no = '1234567890QWERTYUIPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm'
+    x = no[floor(random() * len(no))]
+    for i in range(1,6):
+        x = x + no[floor(random() * len(no))]
+
+    image = ImageCaptcha()
+    data = image.generate_image(x)
+    images = image.write(x, x + '.jpg')
+
 
     if request.method == 'POST':
         form = {}
         form['message_name'] = request.POST.get('message-name', '')
         form['message_email'] = request.POST.get('message-email', '')
         form['message'] = request.POST.get('message', '')
-    
 
+        
         try:
             recaptcha_response = request.POST.get('g-recaptcha-response')
             url = 'https://www.google.com/recaptcha/api/siteverify'
@@ -237,7 +254,7 @@ def contact_us(request):
             req = urllib.request.Request(url, data=data)
             response = urllib.request.urlopen(req)
             result = json.loads(response.read().decode())
-        
+            
             if result['success']:
                 messages = Contact_us.objects.create(
                     fullname = form['message_name'],
@@ -271,10 +288,12 @@ def contact_us(request):
         'site_settings':site_settings,
         'page':'contact_us',
         'item':item,
+        'captcha':images
     })
 
 def search(request):
     q = request.GET.get('q')
+    site_settings = Settings.objects.all()
 
     if q:
         item = NewsDocument.search().query("match", title=q)
@@ -292,10 +311,12 @@ def search(request):
     {
         'item':item,
         'tenders':tenders,
+        'site_settings':site_settings
     })
 
 def order(request):
     site_settings = Settings.objects.all()
+    
 
     if request.method == 'POST':
         form = {}

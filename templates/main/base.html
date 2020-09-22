@@ -106,7 +106,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="search">
+                <div class="search" onclick="searchHide()">
                     <img src="../static/images/search-icon.svg" alt="">
                 </div>
             </div>
@@ -114,7 +114,7 @@
     </div>
     <div class="search-wrapper hide">
         <form class="search-form" method="GET" action="{% url 'main:search' %}">
-            <input name="q" id="q" type="search" class="search-input" placeholder="Search news..">
+            <input name="q" id="q" type="search" class="search-input" placeholder="Search news.." required>
         <button class="search-button" type="submit">
             Search
         </button><br>
@@ -189,7 +189,7 @@
     <script src="https://www.google.com/recaptcha/api.js"></script>
     <script type="text/javascript">
         var onloadCallback = function() {
-          alert("grecaptcha is ready!");
+          console.log("grecaptcha is ready!");
         };
       </script>
     <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"

@@ -62,7 +62,7 @@ Contact us
                             enctype="application/x-www-form-urlencoded"
                             name="fead-back"
                             id="feed-back"
-                            data-url="{% url 'api_v1:contact_us' %}">
+                            data-url="{% url 'main:contact_us' %}">
                         {% csrf_token %}
                         <div id="error"></div>
                         <div class="input-wrapper half">
@@ -77,15 +77,17 @@ Contact us
                             <label  for="message">Your letter</label>
                             <textarea rows="8" name="message" id="message" class="base-input" placeholder="Your letter"required></textarea>
                         </div>
-                        <div class="captcha_image">
-                            {% for image in captcha %}
-                            <img src="/static/{{ image }}" alt="">
-                            {% endfor %}
+                        <div class="input-wrapper">
+                            {% if captcha %}
+                            <img src="data:image/jpeg;base64,{{ captcha }}" style="width: 200px; height: auto;" class="captcha__image" alt="">
+                            <input class="base-input" type="text" name="captcha_form" id="x" placeholder="Input Captcha">
+                            <input type="hidden" name="token" value="{{ token }}">
+                            {% endif %}
                         </div>
-                        <div class="g-recaptcha" data-callback="recaptchaCallback" data-theme="dark" data-sitekey="6LdrGs4ZAAAAAGqlTvftOXHSYRVgkKlX147FumMS"></div>
                         <button type="submit"
                                 id="send-button"
-                                class="feed-back__send" >
+                                class="feed-back__send"
+                                >
                             Send
                         </button>
                     </form>

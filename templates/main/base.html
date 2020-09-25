@@ -113,7 +113,7 @@
         </div>
     </div>
     <div class="search-wrapper hide">
-        <form class="search-form" method="GET" action="{% url 'main:search' %}">
+        <form class="search-form max-content" method="GET" action="{% url 'main:search' %}">
             <input name="q" id="q" type="search" class="search-input" placeholder="Search news.." required>
         <button class="search-button" type="submit">
             Search
@@ -186,14 +186,5 @@
     <script src="{% static 'main/some.js' %}"></script>
     <script src="{% static 'main/main.js' %}"></script>
     <script src="{% static 'main/factory.js' %}"></script>
-    <script src="https://www.google.com/recaptcha/api.js"></script>
-    <script type="text/javascript">
-        var onloadCallback = function() {
-          console.log("grecaptcha is ready!");
-        };
-      </script>
-    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
-    async defer>
-</script>
 </body>
 </html>

@@ -1,7 +1,9 @@
+from django.conf import settings
 from django.shortcuts import render, redirect
 from django.utils import timezone
+from django.core.cache import cache
 from .models import *
-from .helpers import get_pagination, get_day_time
+from modules.helpers import get_pagination, get_day_time
 from .documents import NewsDocument, TenderDocument
 from django.core.mail import send_mail
 from api_v1.tasks import *
@@ -16,7 +18,15 @@ from modules.exceptions import ExceptionInvalidForm
 from math import floor
 from random import random
 from captcha.image import ImageCaptcha
-
+import base64
+import os
+import uuid
+import base64
+from io import BytesIO
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.http import HttpResponse
+ 
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
 
@@ -223,16 +233,24 @@ def contact_us(request):
     else:
         item = ''
 
-    
+    if request.method == 'GET':
+        no = '1234567890qwertyuiopasdfghjklzxcvbnm'
+        x = no[floor(random() * len(no))]
+        for i in range(1,6):
+            x = x + no[floor(random() * len(no))]
 
-    no = '1234567890QWERTYUIPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm'
-    x = no[floor(random() * len(no))]
-    for i in range(1,6):
-        x = x + no[floor(random() * len(no))]
-
-    image = ImageCaptcha()
-    data = image.generate_image(x)
-    images = image.write(x, x + '.jpg')
+        image = ImageCaptcha()
+        data = image.generate_image(x)
+        buffered = BytesIO()
+        data.save(buffered, format="JPEG")
+        captcha = base64.b64encode(buffered.getvalue()).decode('utf-8')
+        token = str(uuid.uuid4())
+        cache.set(token, x, timeout=120)
+        return render(request, 'main/contact_us.html', {'captcha':captcha, 'token': token,
+        'assocations':assocations,
+        'site_settings':site_settings,
+        'page':'contact_us',
+        'item':item,})
 
 
     if request.method == 'POST':
@@ -241,25 +259,17 @@ def contact_us(request):
         form['message_email'] = request.POST.get('message-email', '')
         form['message'] = request.POST.get('message', '')
 
-        
-        try:
-            recaptcha_response = request.POST.get('g-recaptcha-response')
-            url = 'https://www.google.com/recaptcha/api/siteverify'
-            values = {
-                'secret':settings.GOOGLE_RECAPTCHA_SECRET_KEY,
-                'response':recaptcha_response
-            }
+        value = request.POST.get('captcha_form', '')
+        token = request.POST.get('token', '')
 
-            data = urllib.parse.urlencode(values).encode()
-            req = urllib.request.Request(url, data=data)
-            response = urllib.request.urlopen(req)
-            result = json.loads(response.read().decode())
-            
-            if result['success']:
+        if token in cache:
+            cached_value = cache.get(token)
+
+            if cached_value == value:
                 messages = Contact_us.objects.create(
-                    fullname = form['message_name'],
-                    email = form['message_email'],
-                    message = form['message'],
+                fullname = form['message_name'],
+                email = form['message_email'],
+                message = form['message'],
                 )   
 
                 send_mail(
@@ -268,27 +278,26 @@ def contact_us(request):
                     form['message_email'],
                     ['seyitbu1111@gmail.com']
                 )
+
                 return render(request, 'main/contact_us.html', 
-                    {'message_name':form['message_name'],
-                    'assocations':assocations,
-                    'site_settings':site_settings,
-                    'page':'contact_us',
-                    'item':item,
+                {'message_name':form['message_name'],
+                'assocations':assocations,
+                'site_settings':site_settings,
+                'page':'contact_us',
+                'item':item,
                 })
             else:
-                logger.exception('func: contact_us; msg: Catched exception invalid form ')
-                return BAD_REQUEST
-        except ExceptionInvalidForm:
+                return HttpResponse('Invalid form')
+        else:
             logger.exception('func: contact_us; msg: Catched exception invalid form ')
             return BAD_REQUEST
-    
+
     return render(request, 'main/contact_us.html', 
     {
         'assocations':assocations,
         'site_settings':site_settings,
         'page':'contact_us',
         'item':item,
-        'captcha':images
     })
 
 def search(request):
@@ -393,5 +402,4 @@ def order(request):
         'shipping_methods':ONLINE_ORDER_SHIPPING_METHODS,
         'who_is':ONLINE_ORDER_WHO_IS
     })
-
 

@@ -165,6 +165,18 @@ CELERY_ACCEPT_CONTENT  = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_BACKEND  = 'django-db'
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        },
+        "KEY_PREFIX": "app"
+    }
+}
+
+
 EMAIL_HOST          = 'smtp.gmail.com'
 EMAIL_PORT          = 587
 EMAIL_HOST_USER     = 'seyitmyratgeldiyev3012@gmail.com'
@@ -172,6 +184,3 @@ EMAIL_HOST_PASSWORD = 'vvvpfqhzocowpjfz'
 EMAIL_USE_TLS       = True
 
 django_heroku.settings(locals())
-
-GOOGLE_RECAPTCHA_SECRET_KEY = '6LdrGs4ZAAAAADAKqhartW3FSTa7a7R1o7LoSO-k'
-

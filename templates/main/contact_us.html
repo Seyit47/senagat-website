@@ -15,6 +15,7 @@ Contact us
                 <center>
                     <h2>Thanks {{ message_name }}</h2>
                     <p>We are received your message!</p>
+                    {{ ip }}
                 </center>     
                 {% else %}
                 <h2 class="ministry__name">
@@ -75,13 +76,21 @@ Contact us
                         </div>
                         <div class="input-wrapper">
                             <label  for="message">Your letter</label>
-                            <textarea rows="8" name="message" id="message" class="base-input" placeholder="Your letter"required></textarea>
+                            <textarea rows="6" name="message" id="message" class="base-input" placeholder="Your letter"required></textarea>
+                        </div>
+                        <div class="">
+                            {{ ip }}
                         </div>
                         <div class="input-wrapper">
                             {% if captcha %}
-                            <img src="data:image/jpeg;base64,{{ captcha }}" style="width: 200px; height: auto;" class="captcha__image" alt="">
-                            <input class="base-input" type="text" name="captcha_form" id="x" placeholder="Input Captcha">
+                            <div class="captcha-image">
+                                <img src="data:image/jpeg;base64,{{ captcha }}" class="captcha__image" alt="">
+                            </div>
+                            <div class="input-wrapper half">
+                                <input class="base-input" type="text" name="captcha_form" id="x" placeholder="Input Captcha">
+                            </div>
                             <input type="hidden" name="token" value="{{ token }}">
+                            <input type="hidden" name="limit" value="{{ limit }}">
                             {% endif %}
                         </div>
                         <button type="submit"

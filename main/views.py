@@ -13,7 +13,7 @@ from django.conf import settings
 import json
 import urllib
 import logging
-from .responses import BAD_REQUEST
+from .responses import TOO_MANY_REQUESTS, BAD_REQUEST, get_response
 from modules.exceptions import ExceptionInvalidForm
 from math import floor
 from random import random
@@ -24,11 +24,10 @@ import uuid
 import base64
 from io import BytesIO
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
-from django.http import HttpResponse
- 
+from django.http import HttpResponse, Http404
+from ratelimit.decorators import ratelimit
+
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
-
-
 
 logger = logging.getLogger(__name__)
 
@@ -225,7 +224,6 @@ def document(request):
 def contact_us(request):
     assocations = AssocationContacts.objects.all().order_by('-create_ts')
     site_settings = Settings.objects.all()
-
     q = request.GET.get('q')
 
     if q:
@@ -246,10 +244,14 @@ def contact_us(request):
         captcha = base64.b64encode(buffered.getvalue()).decode('utf-8')
         token = str(uuid.uuid4())
         cache.set(token, x, timeout=120)
+        ip = request.META['REMOTE_ADDR']
+        limit = 1
+        cache.set(ip, limit, timeout=None)
         return render(request, 'main/contact_us.html', {'captcha':captcha, 'token': token,
         'assocations':assocations,
         'site_settings':site_settings,
         'page':'contact_us',
+        'limit':limit,
         'item':item,})
 
 
@@ -261,16 +263,19 @@ def contact_us(request):
 
         value = request.POST.get('captcha_form', '')
         token = request.POST.get('token', '')
+        limit = request.POST.get('limit', '')
+        ip = request.META['REMOTE_ADDR']
+
 
         if token in cache:
             cached_value = cache.get(token)
-
+           
             if cached_value == value:
                 messages = Contact_us.objects.create(
                 fullname = form['message_name'],
                 email = form['message_email'],
                 message = form['message'],
-                )   
+                )
 
                 send_mail(
                     form['message_name'],
@@ -284,15 +289,21 @@ def contact_us(request):
                 'assocations':assocations,
                 'site_settings':site_settings,
                 'page':'contact_us',
+                'ip':ip,
                 'item':item,
                 })
             else:
-                return HttpResponse('Invalid form')
+                if ip in cache:
+                    cached_limit = cache.get(ip)
+                    cached_limit+=1
+                    if cached_limit >= 5:
+                        return TOO_MANY_REQUESTS
+                return redirect('main:contact_us')
         else:
             logger.exception('func: contact_us; msg: Catched exception invalid form ')
             return BAD_REQUEST
 
-    return render(request, 'main/contact_us.html', 
+    return render(request, 'main/contact_us.html',
     {
         'assocations':assocations,
         'site_settings':site_settings,

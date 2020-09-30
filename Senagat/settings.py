@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'api_v1',
     'django_celery_results',
     'captcha',
+    'defender'
 ]
 
 ELASTICSEARCH_DSL = {
@@ -63,6 +64,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'defender.middleware.FailedLoginMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -176,7 +178,6 @@ CACHES = {
     }
 }
 
-
 EMAIL_HOST          = 'smtp.gmail.com'
 EMAIL_PORT          = 587
 EMAIL_HOST_USER     = 'seyitmyratgeldiyev3012@gmail.com'
@@ -184,3 +185,6 @@ EMAIL_HOST_PASSWORD = 'vvvpfqhzocowpjfz'
 EMAIL_USE_TLS       = True
 
 django_heroku.settings(locals())
+
+DEFENDER_LOGIN_FAILURE_LIMIT = 10
+DEFENDER_COOLOFF_TIME = 10

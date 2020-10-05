@@ -1,6 +1,7 @@
 amqp==2.6.1
 anyjson==0.3.3
 billiard==3.6.3.0
+captcha==0.3
 celery==4.4.7
 celery-progress==0.0.12
 certifi==2020.6.20
@@ -10,11 +11,16 @@ Django==2.2.15
 django-celery==3.3.1
 django-celery-results==1.2.1
 django-ckeditor==5.9.0
+django-defender==0.7.0
 django-elasticsearch-dsl==7.1.4
 django-filter==2.3.0
 django-heroku==0.3.1
-django-redis==4.12.1
 django-js-asset==1.2.2
+django-ranged-response==0.2.0
+django-ratelimit==3.0.1
+django-redis==4.12.1
+django-redis-ratelimit==0.1.1
+django-simple-captcha==0.5.12
 django-translations==1.1.2
 elasticsearch==7.9.1
 elasticsearch-dsl==7.2.1
@@ -27,9 +33,10 @@ psycopg2-binary==2.8.6
 pycparser==2.20
 python-dateutil==2.8.1
 python-decouple==3.3
+python-redis-rate-limit==0.0.7
 pytz==2020.1
 rabbitmq==0.2.0
-redis==3.5.3
+redis==3.5.0
 six==1.15.0
 SQLAlchemy==1.3.19
 sqlparse==0.3.1

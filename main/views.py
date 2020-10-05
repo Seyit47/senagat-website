@@ -13,7 +13,7 @@ from django.conf import settings
 import json
 import urllib
 import logging
-from .responses import TOO_MANY_REQUESTS, BAD_REQUEST, get_response
+from .responses import TOO_MANY_REQUESTS, BAD_REQUEST, get_response, BOLLY_BLOK_SEN_JIGIM
 from modules.exceptions import ExceptionInvalidForm
 from math import floor
 from random import random
@@ -195,7 +195,7 @@ def tender_detail(request, pk):
     else:
         item = ''
 
-    return render(request, 'main/tender_detail.html', 
+    return render(request, 'main/tender_detail.html',
     {
         'tender':tender[0],
         'page':'tender',
@@ -245,13 +245,12 @@ def contact_us(request):
         token = str(uuid.uuid4())
         cache.set(token, x, timeout=120)
         ip = request.META['REMOTE_ADDR']
-        limit = 1
-        cache.set(ip, limit, timeout=None)
+        attempts = cache.get(ip, 0)
+        attempts += 1
         return render(request, 'main/contact_us.html', {'captcha':captcha, 'token': token,
         'assocations':assocations,
         'site_settings':site_settings,
         'page':'contact_us',
-        'limit':limit,
         'item':item,})
 
 
@@ -263,14 +262,15 @@ def contact_us(request):
 
         value = request.POST.get('captcha_form', '')
         token = request.POST.get('token', '')
-        limit = request.POST.get('limit', '')
-        ip = request.META['REMOTE_ADDR']
-
 
         if token in cache:
             cached_value = cache.get(token)
-           
+    
             if cached_value == value:
+                ip = request.META['REMOTE_ADDR']
+                attempts = cache.get(ip, 0)
+                if attempts > 5:
+                    return BOLLY_BLOK_SEN_JIGIM
                 messages = Contact_us.objects.create(
                 fullname = form['message_name'],
                 email = form['message_email'],
@@ -289,16 +289,16 @@ def contact_us(request):
                 'assocations':assocations,
                 'site_settings':site_settings,
                 'page':'contact_us',
-                'ip':ip,
                 'item':item,
                 })
             else:
-                if ip in cache:
-                    cached_limit = cache.get(ip)
-                    cached_limit+=1
-                    if cached_limit >= 5:
-                        return TOO_MANY_REQUESTS
-                return redirect('main:contact_us')
+                ip = request.META['REMOTE_ADDR']
+                attempts = cache.get(ip, 0)
+                cache.set(ip, attempts + 1, 120)
+                if attempts > 5:
+                    return TOO_MANY_REQUESTS
+                print(attempts)
+                return HttpResponse('Invalid form')
         else:
             logger.exception('func: contact_us; msg: Catched exception invalid form ')
             return BAD_REQUEST

@@ -6,6 +6,11 @@ BAD_REQUEST = HttpResponse(
     content='Bad Request'
 )
 
+INTERNAL_SERVER_ERROR = HttpResponse(
+    status = 500,
+    content = 'Internal Server error'
+)
+
 TOO_MANY_REQUESTS = HttpResponse(
     status = 429,
     content='Too many requests'
@@ -18,3 +23,7 @@ def get_response(content = ''):
         content = json.dumps(content)
     )
 
+BOLLY_BLOK_SEN_JIGIM = HttpResponse(
+    status = 516,
+    content = 'Bolly blok sen jigim'
+)

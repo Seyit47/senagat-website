@@ -13,7 +13,7 @@
         {% for item in news %}
             <div class="news-item">
                 <div class="news-item__img">
-                    <img src="/media/{{ item.image }}" alt="">
+                    <img src="/media/{{ item.thumbnail }}" alt="">
                 </div>
                 <div class="news-item__content">
                     <h2>{{ item.title | truncatechars:70 }}</h2>

@@ -63,7 +63,9 @@ Contact us
                             enctype="application/x-www-form-urlencoded"
                             name="fead-back"
                             id="feed-back"
-                            data-url="{% url 'main:contact_us' %}">
+                            data-url="{% url 'main:contact_us' %}"
+                            onsubmit="captchaHide()"
+                            >
                         {% csrf_token %}
                         <div id="error"></div>
                         <div class="input-wrapper half">
@@ -78,25 +80,24 @@ Contact us
                             <label  for="message">Your letter</label>
                             <textarea rows="6" name="message" id="message" class="base-input" placeholder="Your letter"required></textarea>
                         </div>
-                        <div class="">
-                            {{ ip }}
-                        </div>
                         <div class="input-wrapper">
-                            {% if captcha %}
-                            <div class="captcha-image">
-                                <img src="data:image/jpeg;base64,{{ captcha }}" class="captcha__image" alt="">
+                            <div class="captcha">
+                                {% if captcha %}
+                                <div class="captcha-image">
+                                    <img src="data:image/jpeg;base64,{{ captcha }}" class="captcha__image" alt="">
+                                </div>
+                                <div class="input-wrapper half">
+                                    <input class="base-input" type="text" name="captcha_form" id="x" placeholder="Input Captcha" required>
+                                </div>
+                                <input type="hidden" name="token" value="{{ token }}">
+                                <input type="hidden" name="limit" value="{{ limit }}">
+                                {% endif %}
                             </div>
-                            <div class="input-wrapper half">
-                                <input class="base-input" type="text" name="captcha_form" id="x" placeholder="Input Captcha">
-                            </div>
-                            <input type="hidden" name="token" value="{{ token }}">
-                            <input type="hidden" name="limit" value="{{ limit }}">
-                            {% endif %}
                         </div>
                         <button type="submit"
                                 id="send-button"
                                 class="feed-back__send"
-                                >
+                                onclick="captchaHide()">
                             Send
                         </button>
                     </form>

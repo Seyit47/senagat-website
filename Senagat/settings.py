@@ -186,5 +186,3 @@ EMAIL_USE_TLS       = True
 
 django_heroku.settings(locals())
 
-DEFENDER_LOGIN_FAILURE_LIMIT = 10
-DEFENDER_COOLOFF_TIME = 10
